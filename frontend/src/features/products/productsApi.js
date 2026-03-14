@@ -6,6 +6,7 @@ export const productsApi = {
   create:       (data)   => axiosInstance.post('/products', data),
   update:       (id, data) => axiosInstance.put(`/products/${id}`, data),
   remove:       (id)     => axiosInstance.delete(`/products/${id}`),
-  getCategories:()       => axiosInstance.get('/products/categories'),
+  getCategories:()       => axiosInstance.get('/categories'),
+  getLocations: ()       => axiosInstance.get('/locations'),
   getStock:     (id)     => axiosInstance.get(`/products/${id}/stock`),
 }

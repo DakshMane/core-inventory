@@ -9,7 +9,15 @@ export default function StockByLocation({ productId, uom }) {
 
   useEffect(() => {
     productsApi.getStock(productId)
-      .then((r) => setStock(r.data))
+      .then((r) => {
+        const d = r.data.data || []
+        const mapped = d.map(s => ({
+          warehouse: s.location?.name || 'Unknown',
+          location: s.location?.type || 'Internal',
+          qty: s.quantity
+        }))
+        setStock(mapped)
+      })
       .finally(() => setLoading(false))
   }, [productId])
 

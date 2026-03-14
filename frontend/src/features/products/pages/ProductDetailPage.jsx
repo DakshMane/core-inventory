@@ -15,7 +15,10 @@ export default function ProductDetailPage() {
 
   useEffect(() => {
     productsApi.getOne(id)
-      .then((r) => setProduct(r.data))
+      .then((r) => {
+        const d = r.data.data
+        if (d) setProduct({ ...d, uom: d.unitOfMeasure, id: d._id })
+      })
       .finally(() => setLoading(false))
   }, [id])
 
