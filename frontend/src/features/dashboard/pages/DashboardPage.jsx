@@ -15,12 +15,13 @@ export default function DashboardPage() {
   useEffect(() => {
     async function load() {
       try {
-        const [k, a] = await Promise.all([
-          dashboardApi.getKpis(),
-          dashboardApi.getActivity(),
-        ])
-        setKpis(k.data)
-        setActivity(a.data)
+        const res = await dashboardApi.getDashboard()
+        const data = res.data.data
+        
+        setKpis(data.kpis || {})
+        setActivity(data.recentActivity || [])
+      } catch (err) {
+        console.error('Error loading dashboard:', err)
       } finally {
         setLoading(false)
       }
@@ -36,7 +37,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <LowStockAlert count={kpis.lowStock} />
+      <LowStockAlert count={kpis.lowStockCount} />
       <KpiGrid kpis={kpis} />
 
       <div className="bg-white rounded-xl border border-gray-200 p-5">

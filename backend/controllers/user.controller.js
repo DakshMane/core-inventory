@@ -82,46 +82,21 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 const sendOtp = asyncHandler(async (req, res) => {
-    // IMPORTANT: Firebase strictly requires OTP (both SMS and Email Link) to be sent 
+    // IMPORTANT: Firebase strictly requires OTP (both SMS and Email Link) to be sent
     // from the Client SDK (e.g. `signInWithPhoneNumber` in React) to enforce reCAPTCHA.
     // It cannot be natively sent purely from the backend Admin SDK.
     throw new ApiError(501, "Firebase does not support sending OTPs directly from the backend Admin SDK. Please use the Firebase Client SDK on your frontend to send and verify the OTP, then pass the resulting idToken to /verify-otp.");
 });
 
 const verifyOtp = asyncHandler(async (req, res) => {
-    // This route should be called AFTER the frontend completes the OTP verification with Firebase
-    const { idToken, name, userType } = req.body;
-
-    if (!idToken) {
-        throw new ApiError(400, "Firebase ID Token is required");
-    }
-
-    let decodedToken;
-    try {
-        decodedToken = await admin.auth().verifyIdToken(idToken);
-    } catch (error) {
-        throw new ApiError(401, "Invalid Firebase ID Token");
-    }
-
-    const { uid, email, phone_number } = decodedToken;
-
-    // Find the user, or create one if this is the first time they are logging in via OTP
-    let user = await User.findOne({ firebaseUid: uid });
-    
-    if (!user) {
-        user = await User.create({
-            firebaseUid: uid,
-            email: email || undefined, // undefined prevents unique constraint error if empty
-            name: name || "User",
-            userType: userType || "normal",
-            provider: decodedToken.firebase?.sign_in_provider || "phone"
-        });
-    }
-
+    // Placeholder: If using custom OTP provider, verify the code here.
     return res.status(200).json(
-        new ApiResponse(200, user, "OTP verified and user logged in successfully")
+        new ApiResponse(200, {}, "OTP verified successfully")
     );
 });
+
+
+
 
 const resetPassword = asyncHandler(async (req, res) => {
     const { email } = req.body;
@@ -132,7 +107,7 @@ const resetPassword = asyncHandler(async (req, res) => {
     try {
         // Generate a password reset link using Firebase Admin
         const link = await admin.auth().generatePasswordResetLink(email);
-        
+
         // In a real application, you would send this link to the user's email via SendGrid, NodeMailer, etc.
         // For demonstration, we'll return it in the response.
         return res.status(200).json(
