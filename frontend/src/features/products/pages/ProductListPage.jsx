@@ -22,6 +22,8 @@ export default function ProductListPage() {
           name: p.name,
           category: p.category?.name || p.category,
           uom: p.unitOfMeasure,
+          costPrice: p.costPrice,
+          salePrice: p.salePrice,
           qty: p.totalStock,
           status: p.totalStock > (p.reorderLevel || 0) ? 'in-stock' : 'low-stock'
         }))

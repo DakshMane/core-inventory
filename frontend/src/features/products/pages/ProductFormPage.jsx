@@ -42,6 +42,8 @@ export default function ProductFormPage() {
         category: form.category,
         unitOfMeasure: form.uom,
         reorderLevel: form.reorderLevel || 0,
+        costPrice: form.costPrice || 0,
+        salePrice: form.salePrice || 0,
       }
 
       // Only send initial stock if it's new and location is selected

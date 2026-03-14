@@ -29,6 +29,8 @@ export const createProduct = async (req, res) => {
             category,
             unitOfMeasure,
             reorderLevel,
+            costPrice,
+            salePrice,
             initialStock,
             location
         } = req.body;
@@ -46,7 +48,9 @@ export const createProduct = async (req, res) => {
             sku,
             category: resolvedCategory,
             unitOfMeasure,
-            reorderLevel
+            reorderLevel,
+            costPrice,
+            salePrice
         });
 
         // handle optional initial stock
@@ -122,6 +126,8 @@ export const getProducts = async (req, res) => {
                     sku: 1,
                     unitOfMeasure: 1,
                     reorderLevel: 1,
+                    costPrice: 1,
+                    salePrice: 1,
                     totalStock: 1,
                     category: "$category.name"
                 }
