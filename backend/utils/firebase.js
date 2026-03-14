@@ -1,4 +1,3 @@
-// Are you doing this?
 import admin from 'firebase-admin';
 import serviceAccount from '../../serviceAccount.json' with { type: 'json' };
 

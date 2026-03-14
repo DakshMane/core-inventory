@@ -6,7 +6,21 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 export const createProduct = async (req, res) => {
     try {
 
-        const { name, sku, category, unitOfMeasure, reorderLevel } = req.body;
+        const {
+            name,
+            sku,
+            category,
+            unitOfMeasure,
+            reorderLevel,
+            initialStock,
+            location
+        } = req.body;
+
+        if (!name || !sku) {
+            return res.status(400).json(
+                new ApiResponse(400, null, "Name and SKU are required")
+            );
+        }
 
         const product = await Product.create({
             name,
@@ -16,19 +30,27 @@ export const createProduct = async (req, res) => {
             reorderLevel
         });
 
+        // handle optional initial stock
+        if (initialStock && location) {
+            await StockQuant.create({
+                product: product._id,
+                location,
+                quantity: initialStock
+            });
+        }
+
         return res.json(
-            new ApiResponse(201, product, "Product created")
+            new ApiResponse(201, product, "Product created successfully")
         );
 
     } catch (error) {
 
-        return res.status(400).json(
-            new ApiResponse(400, null, error.message)
+        return res.status(500).json(
+            new ApiResponse(500, null, error.message)
         );
 
     }
 };
-
 
 /* GET ALL PRODUCTS */
 export const getProducts = async (req, res) => {
@@ -36,14 +58,11 @@ export const getProducts = async (req, res) => {
 
         const { category } = req.query;
 
-        const matchStage = {};
-        if (category) matchStage.category = category;
+        const match = {};
+        if (category) match.category = category;
 
         const products = await Product.aggregate([
-
-            {
-                $match: matchStage
-            },
+            { $match: match },
 
             {
                 $lookup: {
@@ -57,7 +76,7 @@ export const getProducts = async (req, res) => {
             {
                 $addFields: {
                     totalStock: {
-                        $sum: "$stock.quantity"
+                        $ifNull: [{ $sum: "$stock.quantity" }, 0]
                     }
                 }
             },
@@ -85,7 +104,7 @@ export const getProducts = async (req, res) => {
                     unitOfMeasure: 1,
                     reorderLevel: 1,
                     totalStock: 1,
-                    "category.name": 1
+                    category: "$category.name"
                 }
             }
 
