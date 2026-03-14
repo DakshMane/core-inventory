@@ -15,7 +15,7 @@ export default function ProductForm({ initial = {}, categories = [], locations =
     { value: 'box',   label: 'Box'      },
   ]
 
-  const catOptions = categories.map((c) => ({ value: c.id, label: c.name }))
+  const catOptions = categories.map((c) => ({ value: c._id || c.id, label: c.name }))
 
   function handleChange(e) {
     setForm((p) => ({ ...p, [e.target.name]: e.target.value }))
@@ -63,7 +63,7 @@ export default function ProductForm({ initial = {}, categories = [], locations =
             name="location" 
             value={form.location} 
             onChange={handleChange} 
-            options={locations.map(l => ({ value: l._id, label: `${l.name} (${l.type})`}))} 
+            options={locations.map(l => ({ value: String(l._id || l.id), label: `${l.name} (${l.type})`}))} 
             disabled={!form.initialQty || form.initialQty <= 0}
             required={form.initialQty > 0}
           />

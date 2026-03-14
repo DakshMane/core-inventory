@@ -5,7 +5,7 @@ import DeliveryLineItem from './DeliveryLineItem'
 
 const emptyLine = () => ({ productName: '', demandQty: '', doneQty: '' })
 
-export default function DeliveryForm({ initial = {}, onSubmit, loading }) {
+export default function DeliveryForm({ initial = {}, onSubmit, loading, products = [] }) {
   const [form, setForm] = useState({
     customer: '', scheduledDate: '', lines: [emptyLine()], ...initial,
   })
@@ -36,7 +36,14 @@ export default function DeliveryForm({ initial = {}, onSubmit, loading }) {
           <button type="button" onClick={addLine} className="text-sm text-blue-600 hover:underline">+ Add line</button>
         </div>
         {form.lines.map((line, i) => (
-          <DeliveryLineItem key={i} line={line} index={i} onChange={handleLine} onRemove={removeLine} />
+          <DeliveryLineItem
+            key={i}
+            line={line}
+            index={i}
+            products={products}
+            onChange={handleLine}
+            onRemove={removeLine}
+          />
         ))}
       </div>
 

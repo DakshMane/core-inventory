@@ -1,13 +1,21 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { deliveriesApi } from '../deliveriesApi'
+import { productsApi } from '../../products/productsApi'
 import DeliveryForm from '../components/DeliveryForm'
 import { useToast } from '../../../hooks/useToast'
 
 export default function DeliveryFormPage() {
-  const navigate = useNavigate()
-  const toast    = useToast()
-  const [loading, setLoading] = useState(false)
+  const navigate  = useNavigate()
+  const toast     = useToast()
+  const [loading,  setLoading]  = useState(false)
+  const [products, setProducts] = useState([])
+
+  useEffect(() => {
+    productsApi.getAll()
+      .then((r) => setProducts(r.data?.data ?? r.data ?? []))
+      .catch(() => {})
+  }, [])
 
   async function handleSubmit(form) {
     setLoading(true)
@@ -26,7 +34,7 @@ export default function DeliveryFormPage() {
     <div className="max-w-3xl space-y-4">
       <h2 className="text-lg font-semibold text-gray-900">New Delivery Order</h2>
       <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <DeliveryForm onSubmit={handleSubmit} loading={loading} />
+        <DeliveryForm onSubmit={handleSubmit} loading={loading} products={products} />
       </div>
     </div>
   )
