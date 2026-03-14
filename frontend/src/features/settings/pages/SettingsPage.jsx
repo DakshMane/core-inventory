@@ -55,7 +55,8 @@ export default function SettingsPage() {
   )
 
   return (
-    <div className="max-w-3xl space-y-8">
+    <div className="w-full space-y-8">
+
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         {section('Warehouses')}
         <WarehouseForm onSubmit={handleAddWarehouse} loading={loading} />
