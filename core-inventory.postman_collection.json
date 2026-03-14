@@ -1,0 +1,578 @@
+{
+  "info": {
+    "_postman_id": "2527ff81-7ef1-458f-9519-53d66290c1b3",
+    "name": "core-inventory",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53193369",
+    "_collection_link": "https://go.postman.co/collection/53193369-2527ff81-7ef1-458f-9519-53d66290c1b3?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "/dashboard",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/dashboard",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "dashboard"
+          ]
+        },
+        "description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+      },
+      "response": []
+    },
+    {
+      "name": "products",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Steel\",\r\n  \"sku\": \"STL-003\",\r\n  \"unitOfMeasure\": \"kg\",\r\n  \"reorderLevel\": 20\r\n\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/products",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/products",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "stockMove",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/stockMoves",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "stockMoves"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "stockMove",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"type\": \"receipt\",\r\n  \"sourceLocation\": \"64fa21c4a9b1234567890001\",\r\n  \"destLocation\": \"64fa21c4a9b1234567890002\",\r\n  \"items\": [\r\n    {\r\n      \"product\": \"69b4e76c5e8762cc9169de8d\",\r\n      \"quantity\": 100\r\n    }\r\n  ],\r\n  \"reference\": \"MOVE-001\",\r\n  \"notes\": \"Stock transfer to warehouse\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/stockMoves",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "stockMoves"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "stockMovesvalidate",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/stockMoves/69b50348e97e13a5f87913d9/validate",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "stockMoves",
+            "69b50348e97e13a5f87913d9",
+            "validate"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "stockmovesingle",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/stockMoves/69b500fb3be2dd40f22c2b3e",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "stockMoves",
+            "69b500fb3be2dd40f22c2b3e"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "stockMoveupdate",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/stockMoves/69b500fb3be2dd40f22c2b3e",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "stockMoves",
+            "69b500fb3be2dd40f22c2b3e"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "productstock",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/products/69b4e76c5e8762cc9169de8d/stock",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "69b4e76c5e8762cc9169de8d",
+            "stock"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "category",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"foods and beverages\",\r\n  \"description\": \"garam garam chaiiii\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/categories",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "categories"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "categorydelete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Electronics\",\r\n  \"description\": \"Electronic devices and components\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/categories/69b50a2458bf9a35dc655b0c",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "categories",
+            "69b50a2458bf9a35dc655b0c"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "category",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/categories",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "categories"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "categorysingle",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Electronics\",\r\n  \"description\": \"Electronic devices and components\"\r\n}"
+        },
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/categories/69b507b4f815617640abffcf",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "categories",
+            "69b507b4f815617640abffcf"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "catergoryupdate",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Electronics\",\r\n  \"description\": \"Electronic devices\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/categories/69b507b4f815617640abffcf",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "categories",
+            "69b507b4f815617640abffcf"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "productsdelete",
+      "request": {
+        "method": "DELETE",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "location",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Shelf A\",\r\n  \"type\": \"internal\",\r\n  \"parentLocation\": \"69b515ad4582007e7467cab0\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/locations",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "locations"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "location",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Shelf A\",\r\n  \"type\": \"internal\",\r\n  \"parentLocation\": \"69b515ad4582007e7467cab0\"\r\n}"
+        },
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/locations",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "locations"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "locationsingle",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Shelf A\",\r\n  \"type\": \"internal\",\r\n  \"parentLocation\": \"69b515ad4582007e7467cab0\"\r\n}"
+        },
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/locations/69b516e1ad022f7da1fd3367",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "locations",
+            "69b516e1ad022f7da1fd3367"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "locationupdate",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Damaged parts\",\r\n  \"type\": \"virtual_loss\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "10.51.154.106:5000/api/v1/locations/69b516fead022f7da1fd336b",
+          "host": [
+            "10",
+            "51",
+            "154",
+            "106"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "locations",
+            "69b516fead022f7da1fd336b"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "locationdelete",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "adjustments",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "productsupdate",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    }
+  ]
+}
