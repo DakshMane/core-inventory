@@ -11,7 +11,7 @@ import cors from "cors"
 import categoryRoutes from "./routes/category.routes.js";
 import locationRoutes from "./routes/location.routes.js";
 import adjustmentRoutes from "./routes/adjustment.routes.js";
-import cors from "cors"
+
 
 const app = express()
 app.use(

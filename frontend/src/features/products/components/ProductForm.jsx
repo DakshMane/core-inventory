@@ -3,9 +3,9 @@ import Input from '../../../components/ui/Input'
 import Select from '../../../components/ui/Select'
 import Button from '../../../components/ui/Button'
 
-export default function ProductForm({ initial = {}, categories = [], onSubmit, loading }) {
+export default function ProductForm({ initial = {}, categories = [], locations = [], isEdit, onSubmit, loading }) {
   const [form, setForm] = useState({
-    name: '', sku: '', category: '', uom: '', initialQty: 0, ...initial,
+    name: '', sku: '', category: '', uom: '', initialQty: 0, location: '', reorderLevel: 0, ...initial,
   })
 
   const uomOptions = [
@@ -36,13 +36,39 @@ export default function ProductForm({ initial = {}, categories = [], onSubmit, l
         <Select label="Category" name="category" value={form.category} onChange={handleChange} options={catOptions} />
         <Select label="Unit of Measure" name="uom" value={form.uom}  onChange={handleChange} options={uomOptions} />
       </div>
-      <Input
-        label="Initial Stock (optional)"
-        type="number" name="initialQty"
-        value={form.initialQty}
-        onChange={handleChange}
-        min={0}
-      />
+
+      <div className="grid grid-cols-2 gap-4">
+        <Input 
+          label="Reorder Level" 
+          type="number" name="reorderLevel" 
+          value={form.reorderLevel} 
+          onChange={handleChange} 
+          min={0} 
+        />
+        <div /> {/* spacing */}
+      </div>
+
+      {!isEdit && (
+        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100 mt-2">
+          <Input
+            label="Initial Stock (optional)"
+            type="number" name="initialQty"
+            value={form.initialQty}
+            onChange={handleChange}
+            min={0}
+            className="bg-green-50/30"
+          />
+          <Select 
+            label="Location for Initial Stock" 
+            name="location" 
+            value={form.location} 
+            onChange={handleChange} 
+            options={locations.map(l => ({ value: l._id, label: `${l.name} (${l.type})`}))} 
+            disabled={!form.initialQty || form.initialQty <= 0}
+            required={form.initialQty > 0}
+          />
+        </div>
+      )}
       <div className="flex justify-end gap-3 pt-2">
         <Button type="submit" loading={loading}>Save Product</Button>
       </div>

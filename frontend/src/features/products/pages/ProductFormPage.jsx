@@ -12,23 +12,51 @@ export default function ProductFormPage() {
 
   const [initial, setInitial]     = useState({})
   const [categories, setCategories] = useState([])
+  const [locations, setLocations]   = useState([])
   const [loading, setLoading]     = useState(false)
 
   useEffect(() => {
-    productsApi.getCategories().then((r) => setCategories(r.data))
-    if (isEdit) productsApi.getOne(id).then((r) => setInitial(r.data))
-  }, [id])
+    Promise.all([
+      productsApi.getCategories(),
+      productsApi.getLocations()
+    ]).then(([catRes, locRes]) => {
+      setCategories(catRes.data.data || [])
+      setLocations(locRes.data.data || [])
+    })
+
+    if (isEdit) {
+      productsApi.getOne(id).then((r) => {
+        const d = r.data.data
+        if (d) setInitial({ ...d, uom: d.unitOfMeasure, category: d.category?._id || d.category })
+      })
+    }
+  }, [id, isEdit])
 
   async function handleSubmit(form) {
     setLoading(true)
     try {
+      // Map UI state back to the backend payload keys
+      const payload = {
+        name: form.name,
+        sku: form.sku,
+        category: form.category,
+        unitOfMeasure: form.uom,
+        reorderLevel: form.reorderLevel || 0,
+      }
+
+      // Only send initial stock if it's new and location is selected
+      if (!isEdit && form.initialQty > 0 && form.location) {
+        payload.initialStock = form.initialQty
+        payload.location     = form.location
+      }
+
       isEdit
-        ? await productsApi.update(id, form)
-        : await productsApi.create(form)
+        ? await productsApi.update(id, payload)
+        : await productsApi.create(payload)
       toast.success(`Product ${isEdit ? 'updated' : 'created'}!`)
       navigate('/products')
-    } catch {
-      toast.error('Something went wrong')
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Something went wrong')
     } finally {
       setLoading(false)
     }
@@ -43,6 +71,8 @@ export default function ProductFormPage() {
         <ProductForm
           initial={initial}
           categories={categories}
+          locations={locations}
+          isEdit={isEdit}
           onSubmit={handleSubmit}
           loading={loading}
         />

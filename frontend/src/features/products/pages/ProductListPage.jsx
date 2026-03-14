@@ -14,7 +14,19 @@ export default function ProductListPage() {
 
   useEffect(() => {
     productsApi.getAll({ search })
-      .then((r) => setProducts(r.data))
+      .then((r) => {
+        const prodData = r.data.data || []
+        const mapped = prodData.map((p) => ({
+          id: p._id,
+          sku: p.sku,
+          name: p.name,
+          category: p.category,
+          uom: p.unitOfMeasure,
+          qty: p.totalStock,
+          status: p.totalStock > (p.reorderLevel || 0) ? 'in-stock' : 'low-stock'
+        }))
+        setProducts(mapped)
+      })
       .finally(() => setLoading(false))
   }, [search])
 
