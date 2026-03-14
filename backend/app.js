@@ -7,7 +7,8 @@ import userRoutes from "./routes/user.routes.js"
 import categoryRoutes from "./routes/category.routes.js";
 import locationRoutes from "./routes/location.routes.js";
 import adjustmentRoutes from "./routes/adjustment.routes.js";
-
+import cors from "cors";
+import alertRoutes from "./routes/alert.routes.js";
 
 const app = express()
 app.use(
@@ -36,5 +37,7 @@ app.use("/api/v1/categories", categoryRoutes);
 app.use("/api/v1/locations", locationRoutes);
 
 app.use("/api/v1/adjustments", adjustmentRoutes);
+
+app.use("/api/v1/alerts", alertRoutes);
 
 export { app }
