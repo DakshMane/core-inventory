@@ -2,10 +2,10 @@ import { StockQuant } from "../models/stockQuant.model.js";
 
 export async function updateStock(product, location, qty, session) {
 
-    let quant = await StockQuant.findOne({
-        product,
-        location
-    }).session(session);
+    let query = StockQuant.findOne({ product, location });
+    if (session) query = query.session(session);
+
+    let quant = await query;
 
     if (!quant) {
         quant = new StockQuant({
@@ -21,7 +21,11 @@ export async function updateStock(product, location, qty, session) {
         throw new Error("Insufficient stock");
     }
 
-    await quant.save({ session });
+    if (session) {
+        await quant.save({ session });
+    } else {
+        await quant.save();
+    }
 
     return quant;
 }

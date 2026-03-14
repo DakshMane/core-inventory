@@ -13,15 +13,15 @@ export default function SettingsPage() {
   const [loading, setLoading]       = useState(false)
 
   useEffect(() => {
-    settingsApi.getWarehouses().then((r) => setWarehouses(r.data))
-    settingsApi.getUoms().then((r) => setUoms(r.data))
+    settingsApi.getWarehouses().then((r) => setWarehouses(r.data.data || []))
+    settingsApi.getUoms().then((r) => setUoms(r.data.data || []))
   }, [])
 
   async function handleAddWarehouse(form) {
     setLoading(true)
     try {
       const res = await settingsApi.createWarehouse(form)
-      setWarehouses((p) => [res.data, ...p])
+      setWarehouses((p) => [res.data.data, ...p])
       toast.success('Warehouse added!')
     } catch { toast.error('Failed to add warehouse') }
     finally { setLoading(false) }
@@ -45,7 +45,7 @@ export default function SettingsPage() {
   async function handleAddUom(name) {
     try {
       const res = await settingsApi.createUom({ name })
-      setUoms((p) => [...p, res.data])
+      setUoms((p) => [...p, res.data.data])
       toast.success('Unit added!')
     } catch { toast.error('Failed to add unit') }
   }

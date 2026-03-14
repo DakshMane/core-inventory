@@ -11,8 +11,8 @@ export default function ProductList({ data = [], loading }) {
     { key: 'name',     label: 'Product' },
     { key: 'qty',      label: 'On Hand',
       render: (v, row) => formatQty(v, row.uom) },
-    { key: 'qty',      label: 'Free To Use',
-      render: (v, row) => formatQty(v, row.uom) },
+    { key: 'freeQty',  label: 'Free To Use',
+      render: (v, row) => formatQty(row.qty, row.uom) },
   ]
 
   return (

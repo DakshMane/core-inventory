@@ -91,7 +91,7 @@ export default function SignupForm() {
         name="password"
         value={form.password}
         onChange={handleChange}
-        placeholder="Min 4 characters"
+        placeholder="Min 6 characters"
         required
       />
 
