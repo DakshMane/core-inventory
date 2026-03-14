@@ -19,6 +19,8 @@ export const getWarehouses = async (req, res) => {
   }
 };
 
+
+
 /* CREATE warehouse */
 export const createWarehouse = async (req, res) => {
   try {

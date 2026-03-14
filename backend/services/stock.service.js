@@ -8,18 +8,29 @@ export async function updateStock(product, location, qty, session) {
     let quant = await query;
 
     if (!quant) {
+        // Only allow creating a new quant record when adding stock (receipts/adjustments).
+        // For outbound moves (negative qty) there is genuinely no stock at this location.
+        if (qty < 0) {
+            throw new Error(
+                `Insufficient stock for product ${product} at location ${location}. Available: 0, Required: ${Math.abs(qty)}`
+            );
+        }
         quant = new StockQuant({
             product,
             location,
-            quantity: 0
+            quantity: 0,
         });
     }
 
-    quant.quantity += qty;
+    const newQty = quant.quantity + qty;
 
-    if (quant.quantity < 0) {
-        throw new Error("Insufficient stock");
+    if (newQty < 0) {
+        throw new Error(
+            `Insufficient stock for product ${product} at location ${location}. Available: ${quant.quantity}, Required: ${Math.abs(qty)}`
+        );
     }
+
+    quant.quantity = newQty;
 
     if (session) {
         await quant.save({ session });
@@ -28,102 +39,4 @@ export async function updateStock(product, location, qty, session) {
     }
 
     return quant;
-}
-
-export const validateStockMove = async (moveId) => {
-
-    const session = await mongoose.startSession();
-
-    try {
-
-        session.startTransaction();
-
-        const move = await StockMove.findById(moveId).session(session);
-
-        if (!move) throw new Error("Move not found");
-
-        if (move.status === "done") {
-            throw new Error("Move already validated");
-        }
-
-        for (const item of move.items) {
-
-            const { product, quantity } = item;
-
-            switch (move.type) {
-
-                case "receipt":
-
-                    await updateStock(
-                        product,
-                        move.destLocation,
-                        quantity,
-                        session
-                    );
-
-                    break;
-
-                case "delivery":
-
-                    await updateStock(
-                        product,
-                        move.sourceLocation,
-                        -quantity,
-                        session
-                    );
-
-                    break;
-
-                case "transfer":
-
-                    await updateStock(
-                        product,
-                        move.sourceLocation,
-                        -quantity,
-                        session
-                    );
-
-                    await updateStock(
-                        product,
-                        move.destLocation,
-                        quantity,
-                        session
-                    );
-
-                    break;
-
-                case "adjustment":
-
-                    await updateStock(
-                        product,
-                        move.destLocation,
-                        quantity,
-                        session
-                    );
-
-                    break;
-
-            }
-
-        }
-
-        move.status = "done";
-
-        await move.save({ session });
-
-        await session.commitTransaction();
-
-        session.endSession();
-
-        return move;
-
-    } catch (error) {
-
-        await session.abortTransaction();
-        session.endSession();
-
-        throw error;
-
-    }
-
-};
+}

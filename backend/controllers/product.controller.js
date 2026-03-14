@@ -2,6 +2,22 @@ import { Product } from "../models/product.model.js";
 import { StockQuant } from "../models/stockQuant.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { StockMove } from "../models/stockMove.model.js";
+import { Category } from "../models/category.model.js";
+import mongoose from "mongoose";
+
+/**
+ * Resolve a category value that may be a name string or already an ObjectId.
+ * Returns the ObjectId, or undefined if nothing was provided.
+ */
+async function resolveCategoryId(category) {
+    if (!category) return undefined;
+    // If it's already a valid ObjectId string, use it directly
+    if (mongoose.Types.ObjectId.isValid(category)) return category;
+    // Otherwise treat it as a category name and look it up
+    const found = await Category.findOne({ name: { $regex: new RegExp(`^${category}$`, "i") } });
+    if (!found) throw new Error(`Category "${category}" not found`);
+    return found._id;
+}
 
 /* CREATE PRODUCT */
 export const createProduct = async (req, res) => {
@@ -23,10 +39,12 @@ export const createProduct = async (req, res) => {
             );
         }
 
+        const resolvedCategory = await resolveCategoryId(category);
+
         const product = await Product.create({
             name,
             sku,
-            category,
+            category: resolvedCategory,
             unitOfMeasure,
             reorderLevel
         });
@@ -155,9 +173,16 @@ export const getProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
     try {
 
+        const updateData = { ...req.body };
+
+        // Resolve category name → ObjectId if provided as a string
+        if (updateData.category) {
+            updateData.category = await resolveCategoryId(updateData.category);
+        }
+
         const product = await Product.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            updateData,
             { new: true }
         );
 

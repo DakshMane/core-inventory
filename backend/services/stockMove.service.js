@@ -1,5 +1,7 @@
 
 import { StockMove } from "../models/stockMove.model.js";
+import { StockQuant } from "../models/stockQuant.model.js";
+import { Product } from "../models/product.model.js";
 import { updateStock } from "./stock.service.js";
 
 export const validateStockMove = async (moveId) => {
@@ -13,6 +15,31 @@ export const validateStockMove = async (moveId) => {
     if (move.status === "done") {
         throw new Error("Already validated");
     }
+
+    // ── Pre-flight availability check for outbound moves ──────────────────
+    // Check ALL items before touching any stock so we never leave stock in a
+    // partially-deducted state and we can report which product is the problem.
+    const outboundTypes = ["delivery", "transfer"];
+    if (outboundTypes.includes(move.type)) {
+        for (const item of move.items) {
+            const { product, quantity } = item;
+            const quant = await StockQuant.findOne({
+                product,
+                location: move.sourceLocation,
+            });
+            const available = quant ? quant.quantity : 0;
+
+            if (available < quantity) {
+                // Try to get a human-readable product name for the error
+                const prod = await Product.findById(product).select("name sku").lean();
+                const label = prod ? (prod.name || prod.sku) : String(product);
+                throw new Error(
+                    `Insufficient stock for "${label}": available ${available}, required ${quantity}`
+                );
+            }
+        }
+    }
+    // ─────────────────────────────────────────────────────────────────────
 
     for (const item of move.items) {
 
