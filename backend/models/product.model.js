@@ -26,6 +26,16 @@ const productSchema = new Schema(
       default: 0,
       description: "Minimum threshold to alert for low stock",
     },
+    costPrice: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    salePrice: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
   },
   { timestamps: true }
 );

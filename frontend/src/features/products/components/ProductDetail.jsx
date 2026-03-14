@@ -6,12 +6,14 @@ export default function ProductDetail({ product }) {
   if (!product) return null
 
   const rows = [
-    { label: 'SKU',       value: product.sku },
-    { label: 'Category',  value: product.category?.name || product.category },
-    { label: 'Unit',      value: product.uom },
-    { label: 'In Stock',  value: formatQty(product.qty, product.uom) },
-    { label: 'Status',    value: <Badge status={product.status} /> },
-    { label: 'Created',   value: formatDate(product.createdAt) },
+    { label: 'SKU',         value: product.sku },
+    { label: 'Category',    value: product.category?.name || product.category },
+    { label: 'Unit',        value: product.uom },
+    { label: 'Cost Price',  value: `₹${Number(product.costPrice || 0).toFixed(2)}` },
+    { label: 'Sale Price',  value: `₹${Number(product.salePrice || 0).toFixed(2)}` },
+    { label: 'In Stock',    value: formatQty(product.qty, product.uom) },
+    { label: 'Status',      value: <Badge status={product.status} /> },
+    { label: 'Created',     value: formatDate(product.createdAt) },
   ]
 
   return (

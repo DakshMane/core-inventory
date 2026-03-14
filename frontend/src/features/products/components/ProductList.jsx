@@ -8,10 +8,12 @@ export default function ProductList({ data = [], loading }) {
   const navigate = useNavigate()
 
   const columns = [
-    { key: 'name',     label: 'Product' },
-    { key: 'qty',      label: 'On Hand',
+    { key: 'name',      label: 'Product' },
+    { key: 'costPrice', label: 'Per Unit Cost',
+      render: (v) => `₹${Number(v || 0).toFixed(2)}` },
+    { key: 'qty',       label: 'On Hand',
       render: (v, row) => formatQty(v, row.uom) },
-    { key: 'freeQty',  label: 'Free To Use',
+    { key: 'freeQty',   label: 'Free To Use',
       render: (v, row) => formatQty(row.qty, row.uom) },
   ]
 

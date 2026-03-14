@@ -5,7 +5,7 @@ import Button from '../../../components/ui/Button'
 
 export default function ProductForm({ initial = {}, categories = [], locations = [], isEdit, onSubmit, loading }) {
   const [form, setForm] = useState({
-    name: '', sku: '', category: '', uom: '', initialQty: 0, location: '', reorderLevel: 0, ...initial,
+    name: '', sku: '', category: '', uom: '', costPrice: 0, salePrice: 0, initialQty: 0, location: '', reorderLevel: 0, ...initial,
   })
 
   const uomOptions = [
@@ -35,6 +35,11 @@ export default function ProductForm({ initial = {}, categories = [], locations =
       <div className="grid grid-cols-2 gap-4">
         <Select label="Category" name="category" value={form.category} onChange={handleChange} options={catOptions} />
         <Select label="Unit of Measure" name="uom" value={form.uom}  onChange={handleChange} options={uomOptions} />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <Input label="Cost Price (₹)" type="number" name="costPrice" value={form.costPrice} onChange={handleChange} min={0} step="0.01" />
+        <Input label="Sale Price (₹)" type="number" name="salePrice" value={form.salePrice} onChange={handleChange} min={0} step="0.01" />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
