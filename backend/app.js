@@ -4,10 +4,6 @@ import dashboardRoutes from "./routes/dashboard.routes.js";
 import stockMoveRoutes from "./routes/stockMove.routes.js";
 import productRoutes from "./routes/product.routes.js";
 import userRoutes from "./routes/user.routes.js"
-import cors from "cors"
-
-
-
 import categoryRoutes from "./routes/category.routes.js";
 import locationRoutes from "./routes/location.routes.js";
 import adjustmentRoutes from "./routes/adjustment.routes.js";
@@ -37,8 +33,8 @@ app.use("/api/v1/products", productRoutes);
 
 app.use("/api/v1/categories", categoryRoutes);
 
-app.use("/api/locations", locationRoutes);
+app.use("/api/v1/locations", locationRoutes);
 
-app.use("/api/adjustments", adjustmentRoutes);
+app.use("/api/v1/adjustments", adjustmentRoutes);
 
 export { app }
