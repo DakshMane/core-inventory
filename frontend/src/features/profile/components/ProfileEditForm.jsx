@@ -5,6 +5,8 @@ import { loginSuccess } from '../../auth/authSlice'
 import Input from '../../../components/ui/Input'
 import Button from '../../../components/ui/Button'
 import { useToast } from '../../../hooks/useToast'
+import { auth } from '../../../config/firebase'
+import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth'
 
 export default function ProfileEditForm({ user }) {
   const dispatch = useDispatch()
@@ -27,13 +29,30 @@ export default function ProfileEditForm({ user }) {
   async function handlePassword(e) {
     e.preventDefault()
     if (pass.newPass !== pass.confirm) return toast.error('Passwords do not match')
+    if (pass.newPass.length < 6) return toast.error('New password must be at least 6 characters')
     setLoading(true)
     try {
-      await profileApi.changePassword({ current: pass.current, password: pass.newPass })
-      toast.success('Password changed!')
+      const firebaseUser = auth.currentUser
+      if (!firebaseUser) throw new Error('Not signed in')
+
+      // Re-authenticate with current password
+      const credential = EmailAuthProvider.credential(firebaseUser.email, pass.current)
+      await reauthenticateWithCredential(firebaseUser, credential)
+
+      // Update to new password
+      await updatePassword(firebaseUser, pass.newPass)
+
+      toast.success('Password changed successfully!')
       setPass({ current: '', newPass: '', confirm: '' })
-    } catch { toast.error('Change failed') }
-    finally { setLoading(false) }
+    } catch (err) {
+      if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+        toast.error('Current password is incorrect')
+      } else {
+        toast.error(err.message || 'Password change failed')
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
