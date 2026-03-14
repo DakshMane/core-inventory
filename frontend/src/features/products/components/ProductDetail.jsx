@@ -7,7 +7,7 @@ export default function ProductDetail({ product }) {
 
   const rows = [
     { label: 'SKU',       value: product.sku },
-    { label: 'Category',  value: product.category },
+    { label: 'Category',  value: product.category?.name || product.category },
     { label: 'Unit',      value: product.uom },
     { label: 'In Stock',  value: formatQty(product.qty, product.uom) },
     { label: 'Status',    value: <Badge status={product.status} /> },

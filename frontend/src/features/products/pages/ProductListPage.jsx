@@ -20,7 +20,7 @@ export default function ProductListPage() {
           id: p._id,
           sku: p.sku,
           name: p.name,
-          category: p.category,
+          category: p.category?.name || p.category,
           uom: p.unitOfMeasure,
           qty: p.totalStock,
           status: p.totalStock > (p.reorderLevel || 0) ? 'in-stock' : 'low-stock'
