@@ -2,6 +2,9 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { ROUTES } from '../../routes/routes'
 import { logout } from '../../features/auth/authSlice'
+import { auth } from '../../config/firebase'
+import { signOut } from 'firebase/auth'
+import axiosInstance from '../../services/axiosInstance'
 
 const nav = [
   {
@@ -38,9 +41,19 @@ export default function Sidebar() {
   const dispatch  = useDispatch()
   const navigate  = useNavigate()
 
-  function handleLogout() {
-    dispatch(logout())
-    navigate(ROUTES.LOGIN)
+  async function handleLogout() {
+    try {
+      // 1. Call backend to revoke refresh tokens
+      await axiosInstance.post('/user/logout')
+      // 2. Sign out from Firebase
+      await signOut(auth)
+    } catch (err) {
+      console.error('Logout error:', err)
+    } finally {
+      // 3. Clear local state and redirect
+      dispatch(logout())
+      navigate(ROUTES.LOGIN)
+    }
   }
 
   return (
