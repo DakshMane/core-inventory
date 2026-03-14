@@ -50,7 +50,7 @@ export default function Topbar() {
   const opsRef = useRef(null);
   const mobileRef = useRef(null);
 
-  const title = pageTitles[location.pathname] ?? "Dashboard";
+  const title = pageTitles[location.pathname] ?? "";
 
   // Close user dropdown on outside click
   useEffect(() => {
