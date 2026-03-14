@@ -10,6 +10,8 @@ import cors from "cors"
 
 import categoryRoutes from "./routes/category.routes.js";
 import locationRoutes from "./routes/location.routes.js";
+import adjustmentRoutes from "./routes/adjustment.routes.js";
+import cors from "cors"
 
 const app = express()
 app.use(
@@ -36,5 +38,7 @@ app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/categories", categoryRoutes);
 
 app.use("/api/locations", locationRoutes);
+
+app.use("/api/adjustments", adjustmentRoutes);
 
 export { app }
