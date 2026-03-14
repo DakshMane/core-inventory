@@ -1,6 +1,7 @@
 import { Product } from "../models/product.model.js";
 import { StockQuant } from "../models/stockQuant.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { StockMove } from "../models/stockMove.model.js";
 
 /* CREATE PRODUCT */
 export const createProduct = async (req, res) => {
@@ -214,4 +215,71 @@ export const getProductStock = async (req, res) => {
         );
 
     }
+};
+
+
+/* PRODUCT MOVE HISTORY */
+
+export const getProductMoves = async (req, res) => {
+
+    try {
+
+        const productId = req.params.id;
+
+        const moves = await StockMove.find({
+            "items.product": productId
+        })
+            .populate("sourceLocation", "name type")
+            .populate("destLocation", "name type")
+            .populate("items.product", "name sku")
+            .sort({ createdAt: -1 });
+
+        const history = moves.map(move => {
+
+            const item = move.items.find(
+                i => i.product._id.toString() === productId
+            );
+
+            let quantityChange = item.quantity;
+
+            if (move.type === "delivery") {
+                quantityChange = -item.quantity;
+            }
+
+            if (move.type === "transfer") {
+
+                if (move.sourceLocation) {
+                    quantityChange = -item.quantity;
+                }
+
+                if (move.destLocation) {
+                    quantityChange = item.quantity;
+                }
+
+            }
+
+            return {
+                type: move.type,
+                status: move.status,
+                reference: move.reference,
+                quantity: quantityChange,
+                sourceLocation: move.sourceLocation,
+                destLocation: move.destLocation,
+                createdAt: move.createdAt
+            };
+
+        });
+
+        return res.json(
+            new ApiResponse(200, history)
+        );
+
+    } catch (error) {
+
+        return res.status(500).json(
+            new ApiResponse(500, null, error.message)
+        );
+
+    }
+
 };
