@@ -27,7 +27,7 @@ export default function DeliveryForm({ initial = {}, onSubmit, loading }) {
     <form onSubmit={(e) => { e.preventDefault(); onSubmit(form) }} className="space-y-5">
       <div className="grid grid-cols-2 gap-4">
         <Input label="Customer"       name="customer"      value={form.customer}      onChange={handleField} placeholder="Customer name" required />
-        <Input label="Scheduled Date" type="date" name="scheduledDate" value={form.scheduledDate} onChange={handleField} />
+        <Input label="Scheduled Date" type="date" name="scheduledDate" value={form.scheduledDate} onChange={handleField} min={new Date().toISOString().split('T')[0]} />
       </div>
 
       <div>

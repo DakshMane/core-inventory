@@ -55,7 +55,7 @@ export default function ReceiptForm({ initial = {}, onSubmit, loading }) {
             <Input label="Destination Location" value="WH/Stock" disabled />
           </div>
           <div className="space-y-4">
-            <Input label="Scheduled Date" type="date" name="scheduledDate" value={form.scheduledDate} onChange={handleField} />
+            <Input label="Scheduled Date" type="date" name="scheduledDate" value={form.scheduledDate} onChange={handleField} min={new Date().toISOString().split('T')[0]} />
             <Input label="Source Document" placeholder="e.g. PO0001" disabled />
           </div>
         </div>

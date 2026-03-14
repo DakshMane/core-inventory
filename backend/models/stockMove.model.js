@@ -49,6 +49,10 @@ const stockMoveSchema = new Schema(
       type: String,
       trim: true,
     },
+    scheduledDate: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );

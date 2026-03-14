@@ -17,7 +17,7 @@ function serialise(move) {
     customer: m.destLocation?.name || "—",
     sourceLocation: m.sourceLocation?.name || "WH/Stock",
     status: m.status,
-    scheduledDate: m.createdAt,
+    scheduledDate: m.scheduledDate,
     notes: m.notes,
     lines: (m.items || []).map((it) => ({
       productName: it.product?.name || it.product,
@@ -127,7 +127,7 @@ export const getDelivery = async (req, res) => {
 /* CREATE DELIVERY */
 export const createDelivery = async (req, res) => {
   try {
-    const { customer, lines, notes, reference, sourceLocation, destLocation, items } = req.body;
+    const { customer, lines, notes, reference, scheduledDate, sourceLocation, destLocation, items } = req.body;
 
     let resolvedSource, resolvedDest, resolvedItems;
 
@@ -156,6 +156,7 @@ export const createDelivery = async (req, res) => {
       items: resolvedItems,
       reference,
       notes,
+      scheduledDate: scheduledDate || undefined,
       createdBy: req.user?._id,
     });
 
@@ -192,7 +193,7 @@ export const updateDelivery = async (req, res) => {
         .json(new ApiResponse(400, null, "Only draft deliveries can be edited"));
     }
 
-    const { customer, lines, notes, reference } = req.body;
+    const { customer, lines, notes, reference, scheduledDate } = req.body;
 
     if (customer) {
       delivery.destLocation = await resolveCustomerLocation(customer);
@@ -202,6 +203,7 @@ export const updateDelivery = async (req, res) => {
     }
     if (notes !== undefined) delivery.notes = notes;
     if (reference !== undefined) delivery.reference = reference;
+    if (scheduledDate !== undefined) delivery.scheduledDate = scheduledDate;
 
     await delivery.save();
 

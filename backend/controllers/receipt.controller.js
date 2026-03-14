@@ -17,7 +17,7 @@ function serialise(move) {
     supplier: m.sourceLocation?.name || "—",
     destLocation: m.destLocation?.name || "WH/Stock",
     status: m.status,
-    scheduledDate: m.createdAt,
+    scheduledDate: m.scheduledDate,
     notes: m.notes,
     lines: (m.items || []).map((it) => ({
       productName: it.product?.name || it.product,
@@ -129,7 +129,7 @@ export const getReceipt = async (req, res) => {
 /* CREATE RECEIPT */
 export const createReceipt = async (req, res) => {
   try {
-    const { supplier, lines, notes, reference, sourceLocation, destLocation, items } = req.body;
+    const { supplier, lines, notes, reference, scheduledDate, sourceLocation, destLocation, items } = req.body;
 
     // Support both frontend-form format and raw StockMove format
     let resolvedSource, resolvedDest, resolvedItems;
@@ -159,6 +159,7 @@ export const createReceipt = async (req, res) => {
       items: resolvedItems,
       reference,
       notes,
+      scheduledDate: scheduledDate || undefined,
       createdBy: req.user?._id,
     });
 
@@ -196,7 +197,7 @@ export const updateReceipt = async (req, res) => {
         .json(new ApiResponse(400, null, "Only draft receipts can be edited"));
     }
 
-    const { supplier, lines, notes, reference } = req.body;
+    const { supplier, lines, notes, reference, scheduledDate } = req.body;
 
     if (supplier) {
       receipt.sourceLocation = await resolveVendorLocation(supplier);
@@ -206,6 +207,7 @@ export const updateReceipt = async (req, res) => {
     }
     if (notes !== undefined) receipt.notes = notes;
     if (reference !== undefined) receipt.reference = reference;
+    if (scheduledDate !== undefined) receipt.scheduledDate = scheduledDate;
 
     await receipt.save();
 
