@@ -12,7 +12,7 @@ export default function DeliveryDetailPage() {
 
   useEffect(() => {
     deliveriesApi.getOne(id)
-      .then((r) => setDelivery(r.data))
+      .then((r) => setDelivery(r.data.data))
       .finally(() => setLoading(false))
   }, [id])
 

@@ -14,7 +14,7 @@ export default function DeliveryListPage() {
 
   useEffect(() => {
     deliveriesApi.getAll(filters)
-      .then((r) => setDeliveries(r.data))
+      .then((r) => setDeliveries(r.data.data || []))
       .finally(() => setLoading(false))
   }, [filters])
 

@@ -12,7 +12,7 @@ export default function ReceiptDetailPage() {
 
   useEffect(() => {
     receiptsApi.getOne(id)
-      .then((r) => setReceipt(r.data))
+      .then((r) => setReceipt(r.data.data))
       .finally(() => setLoading(false))
   }, [id])
 

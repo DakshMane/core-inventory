@@ -16,7 +16,7 @@ export default function ValidateReceiptButton({ receiptId, status, onValidated }
     try {
       const res = await receiptsApi.validate(receiptId)
       toast.success('Receipt validated — stock updated!')
-      onValidated(res.data)
+      onValidated(res.data.data)
     } catch {
       toast.error('Validation failed')
     } finally {

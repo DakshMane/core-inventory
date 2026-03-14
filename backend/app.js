@@ -11,6 +11,9 @@ import cors from "cors"
 import categoryRoutes from "./routes/category.routes.js";
 import locationRoutes from "./routes/location.routes.js";
 import adjustmentRoutes from "./routes/adjustment.routes.js";
+import receiptRoutes from "./routes/receipt.routes.js";
+import deliveryRoutes from "./routes/delivery.routes.js";
+import moveHistoryRoutes from "./routes/moveHistory.routes.js";
 
 
 const app = express()
@@ -40,5 +43,11 @@ app.use("/api/v1/categories", categoryRoutes);
 app.use("/api/locations", locationRoutes);
 
 app.use("/api/adjustments", adjustmentRoutes);
+
+app.use("/api/v1/receipts", receiptRoutes);
+
+app.use("/api/v1/deliveries", deliveryRoutes);
+
+app.use("/api/v1/move-history", moveHistoryRoutes);
 
 export { app }

@@ -8,8 +8,8 @@ export default function ReceiptList({ data = [], loading }) {
 
   const columns = [
     { key: 'ref',           label: 'Reference' },
-    { key: 'supplier',      label: 'Supplier' },
-    { key: 'scheduledDate', label: 'Date',   render: (v) => formatDate(v) },
+    { key: 'supplier',      label: 'From' },
+    { key: 'destLocation',  label: 'To', render: () => 'WH/Stock' }, // Backend currently routes receipts here natively
     { key: 'status',        label: 'Status', render: (v) => <Badge status={v} /> },
   ]
 

@@ -63,6 +63,37 @@ export const getDashboard = async (req, res) => {
             status: { $ne: "done" }
         });
 
+        // LATE OPERATIONS (created more than 3 days ago and not done)
+        const threeDaysAgo = new Date();
+        threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+
+        const lateReceipts = await StockMove.countDocuments({
+            type: "receipt",
+            status: { $nin: ["done", "cancelled"] },
+            createdAt: { $lte: threeDaysAgo }
+        });
+
+        const lateDeliveries = await StockMove.countDocuments({
+            type: "delivery",
+            status: { $nin: ["done", "cancelled"] },
+            createdAt: { $lte: threeDaysAgo }
+        });
+
+        // WAITING DELIVERIES
+        const waitingDeliveries = await StockMove.countDocuments({
+            type: "delivery",
+            status: "waiting"
+        });
+
+        // TOTAL OPERATIONS
+        const totalReceiptOps = await StockMove.countDocuments({
+            type: "receipt"
+        });
+
+        const totalDeliveryOps = await StockMove.countDocuments({
+            type: "delivery"
+        });
+
         // RECENT ACTIVITY
         const recentActivity = await StockMove.find()
             .populate("items.product", "name sku")
@@ -132,7 +163,12 @@ export const getDashboard = async (req, res) => {
                     lowStockCount: lowStockProducts.length,
                     pendingReceipts,
                     pendingDeliveries,
-                    pendingTransfers
+                    pendingTransfers,
+                    lateReceipts,
+                    lateDeliveries,
+                    waitingDeliveries,
+                    totalReceiptOps,
+                    totalDeliveryOps
                 },
                 lowStockProducts,
                 recentActivity,

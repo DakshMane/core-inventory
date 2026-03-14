@@ -13,7 +13,7 @@ export default function MoveHistoryPage() {
   useEffect(() => {
     setLoading(true)
     moveHistoryApi.getAll({ ...filters, search })
-      .then((r) => setMoves(r.data))
+      .then((r) => setMoves(r.data.data || []))
       .finally(() => setLoading(false))
   }, [filters, search])
 

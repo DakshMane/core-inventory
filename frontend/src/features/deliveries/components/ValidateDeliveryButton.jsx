@@ -16,7 +16,7 @@ export default function ValidateDeliveryButton({ deliveryId, status, onValidated
     try {
       const res = await deliveriesApi.validate(deliveryId)
       toast.success('Delivery validated — stock reduced!')
-      onValidated(res.data)
+      onValidated(res.data.data)
     } catch {
       toast.error('Validation failed')
     } finally {

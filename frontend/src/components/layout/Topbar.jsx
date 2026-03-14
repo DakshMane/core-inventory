@@ -19,12 +19,11 @@ const pageTitles = {
 }
 
 const navLinks = [
-  { label: 'Dashboard', path: ROUTES.DASHBOARD },
-  { label: 'Products',  path: ROUTES.PRODUCTS },
-  { label: 'Operations',path: ROUTES.RECEIPTS },
-  { label: 'Stock',     path: ROUTES.ADJUSTMENTS },
+  { label: 'Dashboard',  path: ROUTES.DASHBOARD },
+  { label: 'Operations', path: ROUTES.RECEIPTS },
+  { label: 'Stock',      path: ROUTES.PRODUCTS },
   { label: 'Move History', path: ROUTES.MOVE_HISTORY },
-  { label: 'Settings',  path: ROUTES.SETTINGS }
+  { label: 'Settings',   path: ROUTES.SETTINGS }
 ]
 
 export default function Topbar() {

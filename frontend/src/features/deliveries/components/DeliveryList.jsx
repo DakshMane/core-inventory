@@ -8,9 +8,10 @@ export default function DeliveryList({ data = [], loading }) {
 
   const columns = [
     { key: 'ref',           label: 'Reference' },
-    { key: 'customer',      label: 'Customer'  },
-    { key: 'scheduledDate', label: 'Date',     render: (v) => formatDate(v) },
-    { key: 'status',        label: 'Status',   render: (v) => <Badge status={v} /> },
+    { key: 'sourceLocation',label: 'From',   render: () => 'WH/Stock' }, // Backend primarily routes from main stock initially
+    { key: 'customer',      label: 'Location'  },
+    { key: 'scheduledDate', label: 'Scheduled Date', render: (v) => formatDate(v) },
+    { key: 'status',        label: 'Status', render: (v) => <Badge status={v} /> },
   ]
 
   return (

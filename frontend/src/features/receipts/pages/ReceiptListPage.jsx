@@ -14,7 +14,7 @@ export default function ReceiptListPage() {
 
   useEffect(() => {
     receiptsApi.getAll(filters)
-      .then((r) => setReceipts(r.data))
+      .then((r) => setReceipts(r.data.data || []))
       .finally(() => setLoading(false))
   }, [filters])
 
