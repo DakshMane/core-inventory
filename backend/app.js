@@ -4,7 +4,13 @@ import dashboardRoutes from "./routes/dashboard.routes.js";
 import stockMoveRoutes from "./routes/stockMove.routes.js";
 import productRoutes from "./routes/product.routes.js";
 import userRoutes from "./routes/user.routes.js"
+import cors from "cors"
 const app = express()
+app.use(cors({
+  origin:  process.env.FRONTEND_URL || "http://localhost:5173",
+  credentials: true,
+}))
+
 app.use(express.json())
 app.get("/", (req, res) => {
   res.json(new ApiResponse(200, { message: "API running" }));

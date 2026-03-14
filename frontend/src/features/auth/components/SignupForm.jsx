@@ -5,6 +5,9 @@ import { loginStart, loginSuccess, loginFailure } from '../authSlice'
 import { ROUTES } from '../../../routes/routes'
 import Input from '../../../components/ui/Input'
 import Button from '../../../components/ui/Button'
+import { auth } from '../../../config/firebase'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import axiosInstance from '../../../services/axiosInstance'
 
 export default function SignupForm() {
   const dispatch = useDispatch()
@@ -20,18 +23,36 @@ export default function SignupForm() {
     e.preventDefault()
     dispatch(loginStart())
 
-    // ✅ Mock signup — no backend needed
-    setTimeout(() => {
-      if (form.name && form.email && form.password.length >= 4) {
-        dispatch(loginSuccess({
-          user:  { name: form.name, email: form.email, role: 'Inventory Manager' },
-          token: 'mock-token-123',
-        }))
-        navigate(ROUTES.DASHBOARD)
-      } else {
-        dispatch(loginFailure('Fill all fields. Password min 4 characters.'))
-      }
-    }, 600)
+    try {
+      // 1. Create user with Firebase
+      const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password)
+      const firebaseToken = await userCredential.user.getIdToken()
+
+      // 2. Call our backend to save user details (using token for verification)
+      const response = await axiosInstance.post('/user/register', {
+        idToken: firebaseToken,
+        name: form.name,
+        userType: 'normal',
+      })
+
+      const userData = response.data.data
+
+      // 3. Dispatch success with user data and token
+      dispatch(
+        loginSuccess({
+          user: userData,
+          token: firebaseToken,
+        })
+      )
+      navigate(ROUTES.DASHBOARD)
+    } catch (err) {
+      console.error('Signup error:', err)
+      dispatch(
+        loginFailure(
+          err.response?.data?.message || err.message || 'Signup failed. Please try again.'
+        )
+      )
+    }
   }
 
   return (

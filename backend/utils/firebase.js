@@ -2,8 +2,8 @@
 import admin from 'firebase-admin';
 import serviceAccount from '../../serviceAccount.json' with { type: 'json' };
 
-const adminInfo = admin.initializeApp({
+admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
-console.log(adminInfo)
+// console.log(adminInfo)
 export default admin;
