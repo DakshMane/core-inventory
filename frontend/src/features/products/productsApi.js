@@ -1,0 +1,11 @@
+import axiosInstance from '../../services/axiosInstance'
+
+export const productsApi = {
+  getAll:       (params) => axiosInstance.get('/products', { params }),
+  getOne:       (id)     => axiosInstance.get(`/products/${id}`),
+  create:       (data)   => axiosInstance.post('/products', data),
+  update:       (id, data) => axiosInstance.put(`/products/${id}`, data),
+  remove:       (id)     => axiosInstance.delete(`/products/${id}`),
+  getCategories:()       => axiosInstance.get('/products/categories'),
+  getStock:     (id)     => axiosInstance.get(`/products/${id}/stock`),
+}
