@@ -1,8 +1,6 @@
 import { validateStockMove } from "../services/stockMove.service.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { StockMove } from "../models/stockMove.model.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import { validateStockMove } from "../services/stockMove.service.js";
 
 /* CREATE STOCK MOVE */
 export const createStockMove = async (req, res) => {
