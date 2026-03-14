@@ -96,8 +96,12 @@ export default function Topbar() {
 
   return (
     <header className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-6 relative z-40">
-      {/* ── Left: Desktop Nav ── */}
-      <nav className="hidden md:flex items-center gap-6">
+      {/* ── Left: Logo + Desktop Nav ── */}
+      <div className="hidden md:flex items-center gap-6">
+        <NavLink to={ROUTES.DASHBOARD} className="flex items-center shrink-0">
+          <img src="/core_inventory_logo.svg" alt="Core Inventory" className="h-8 w-auto" />
+        </NavLink>
+        <nav className="flex items-center gap-6">
         {navLinks.map((link) =>
           link.submenu ? (
             // Operations with submenu
@@ -164,24 +168,30 @@ export default function Topbar() {
           ),
         )}
       </nav>
+      </div>
 
-      {/* ── Left: Hamburger (mobile) ── */}
-      <button
-        data-hamburger
-        onClick={() => setMobileOpen((p) => !p)}
-        className="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-1.5 rounded-md hover:bg-gray-100 transition-colors"
-        aria-label="Toggle menu"
-      >
-        <span
-          className={`block h-0.5 w-5 bg-gray-700 transition-all duration-200 ${mobileOpen ? "rotate-45 translate-y-2" : ""}`}
-        />
-        <span
-          className={`block h-0.5 w-5 bg-gray-700 transition-all duration-200 ${mobileOpen ? "opacity-0" : ""}`}
-        />
-        <span
-          className={`block h-0.5 w-5 bg-gray-700 transition-all duration-200 ${mobileOpen ? "-rotate-45 -translate-y-2" : ""}`}
-        />
-      </button>
+      {/* ── Left: Logo + Hamburger (mobile) ── */}
+      <div className="md:hidden flex items-center gap-3">
+        <NavLink to={ROUTES.DASHBOARD} className="flex items-center shrink-0">
+          <img src="/core_inventory_logo.svg" alt="Core Inventory" className="h-7 w-auto" />
+        </NavLink>
+        <button
+          data-hamburger
+          onClick={() => setMobileOpen((p) => !p)}
+          className="flex flex-col justify-center items-center w-8 h-8 gap-1.5 rounded-md hover:bg-gray-100 transition-colors"
+          aria-label="Toggle menu"
+        >
+          <span
+            className={`block h-0.5 w-5 bg-gray-700 transition-all duration-200 ${mobileOpen ? "rotate-45 translate-y-2" : ""}`}
+          />
+          <span
+            className={`block h-0.5 w-5 bg-gray-700 transition-all duration-200 ${mobileOpen ? "opacity-0" : ""}`}
+          />
+          <span
+            className={`block h-0.5 w-5 bg-gray-700 transition-all duration-200 ${mobileOpen ? "-rotate-45 -translate-y-2" : ""}`}
+          />
+        </button>
+      </div>
 
       {/* ── Right: Title & User ── */}
       <div className="flex items-center gap-4 md:gap-6">
